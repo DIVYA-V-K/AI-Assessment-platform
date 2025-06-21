@@ -1,0 +1,15 @@
+.DS_Store
+pyvenv.cfg
+__pycache__/
+*.pyc
+*.pt
+*.pkl
+*.h5
+*.zip
+.env
+.venv/
+bin/
+lib/
+include/
+etc/
+.ipynb_checkpoints/
