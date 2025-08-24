@@ -2,8 +2,14 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 # Load the model and tokenizer
 MODEL_NAME = "google/flan-t5-large"
-tokenizer = T5Tokenizer.from_pretrained(MODEL_NAME, legacy=False)
-model = T5ForConditionalGeneration.from_pretrained(MODEL_NAME)
+model = None
+tokenizer = None
+
+def load_model():
+    global model, tokenizer
+    if model is None or tokenizer is None:
+        tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-small")
+        model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-small")
 
 def generate_questions(prompt, num_questions=5):
     """Generate unique, high-quality questions from a prompt."""

@@ -1,0 +1,11 @@
+flask
+numpy
+pandas
+scikit-learn
+torch
+transformers
+sentence-transformers
+faiss-cpu
+python-dotenv
+
+streamlit
