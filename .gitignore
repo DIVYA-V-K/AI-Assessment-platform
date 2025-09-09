@@ -13,3 +13,18 @@ lib/
 include/
 etc/
 .ipynb_checkpoints/
+
+# Ignore Python virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter notebooks checkpoints (optional)
+.ipynb_checkpoints/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
