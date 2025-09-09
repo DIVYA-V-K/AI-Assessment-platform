@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 import time
 from pdf_processor import extract_text_from_pdf
-from question_generator import generate_from_text, generate_from_topic
+from question_generator import generate_questions, generate_from_text, generate_from_topic
 from evaluator import evaluate_answer
 from answer_classifier import generate_ideal_answer
 from plagiarism_checker import calculate_plagiarism_score

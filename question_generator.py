@@ -2,36 +2,28 @@ from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 # Load the model and tokenizer
 MODEL_NAME = "google/flan-t5-large"
-model = None
-tokenizer = None
-
-def load_model():
-    global model, tokenizer
-    if model is None or tokenizer is None:
-        tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-small")
-        model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-small")
+tokenizer = T5Tokenizer.from_pretrained(MODEL_NAME, legacy=False)
+model = T5ForConditionalGeneration.from_pretrained(MODEL_NAME)
 
 def generate_questions(prompt, num_questions=5):
-    """Generate unique, high-quality questions from a prompt."""
-    input_ids = tokenizer(prompt, return_tensors="pt").input_ids
+    if tokenizer is None or model is None:
+        raise RuntimeError("Model or tokenizer not initialized!")
+
+    inputs = tokenizer(prompt, return_tensors="pt")
+    input_ids = inputs.input_ids
+
     outputs = model.generate(
         input_ids,
-        max_length=150,
-        num_return_sequences=num_questions * 2,  # Generate extra for better filtering
+        max_length=120,
+        num_return_sequences=num_questions*2,
         do_sample=True,
         temperature=0.9,
         top_p=0.85
     )
-    questions = [tokenizer.decode(output, skip_special_tokens=True).strip() for output in outputs]
 
-    # Filter and refine questions
-    filtered_questions = list(set(filter(lambda q: len(q) > 20 and "?" in q, questions)))
-    unique_questions = list(set(filtered_questions))[:num_questions]
-
-    if not unique_questions:
-        return ["No meaningful questions generated. Try refining your prompt."]
-    
-    return unique_questions
+    questions = [tokenizer.decode(o, skip_special_tokens=True).strip() for o in outputs]
+    filtered = list(set(filter(lambda q: len(q) > 20 and "?" in q, questions)))
+    return filtered[:num_questions] if filtered else ["No meaningful questions generated."]
 
 def generate_from_topic(topic, num_questions=5, difficulty="Medium", question_type="Theory"):
     """Generate questions from topic with specified difficulty and type (Theory/Code)."""
